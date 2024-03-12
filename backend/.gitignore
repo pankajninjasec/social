@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+/prisma/.env
+/prisma/.prisma
+/prisma/migration.lock
+/prisma/dev.db
+/.next/
+/out/
+/.npm
+/.yarn
+/.pnp
+.pnp.js
+yarn.lock
