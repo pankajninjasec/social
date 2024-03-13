@@ -10,6 +10,7 @@ const Nav = () => {
   const { auth , setAuth } = useAuthStore()
   const { myStore , setMystore } = myNewStore()
 
+
   const queryClient = useQueryClient()
 
   function logout() {

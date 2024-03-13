@@ -12,24 +12,12 @@ import { useInView } from 'react-intersection-observer';
 import Cookies from 'js-cookie';
 import router from 'next/router';
 import SearchPosts from './search';
-
-
-
-export const fetchPosts = async ({ pageParam = 1 }) => {
-  const response = await axios.get(`http://localhost:8000/posts/all?page=${pageParam}&pageSize=5`);
-  return response.data;
-};
-
-
-export const SearchfetchPosts = async (query) => {
-  const response = await axios.get(`http://localhost:8000/posts/search?query=${query}&pageSize=10`);
-  return response.data;
-};
-
+import useUserData from '@/services/actions/getUser';
 
 
 
 const Post = () => {
+  const { fetchUserPost , fetchPosts , SearchfetchPosts } = useUserData();
   const { ref , inView } = useInView();
   const { auth , setAuth } = useAuthStore()
   const { postStore , setPostStore } = usePostStore();
@@ -41,21 +29,6 @@ const Post = () => {
   const [fetchingUserPosts, setFetchingUserPosts] = useState(false);
   const searchInputRef = useRef(null);
   const token = myStore ? myStore : jwtToken
- 
-
-
-
-
- const fetchUserPost = async ({ pageParam = 1 }) => {
-  const response = await axios.get(`http://localhost:8000/posts/mypost?page=${pageParam}&pageSize=5`,{
-    headers: {
-        Authorization: `Bearer ${token}`
-
-    },
-  });
-  return response.data;
-};
-
 
 
 
