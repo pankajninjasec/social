@@ -1,16 +1,11 @@
 import React, { useState } from 'react'
-import Layout from '@/layouts/layout'
+import Layout from '../app/layout'
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import {useRouter} from "next/router";
 import toast from 'react-hot-toast';
+import { RegisterFormData } from '@/types/type';
 
-
-interface RegisterFormData {
-  name: string;
-  email: string;
-  password: string;
-}
 
 
 const Register = () => {

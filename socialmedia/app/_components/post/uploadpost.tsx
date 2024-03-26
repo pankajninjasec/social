@@ -1,49 +1,50 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useMutation,useQueryClient } from 'react-query';
-
+import { useMutation, useQueryClient } from 'react-query';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { myNewStore, usePostStore } from '@/services/store/store';
 
 const jwtToken = Cookies.get('jwt');
 
-const UploadPost = () => {
-    const { postStore , setPostStore } = usePostStore()
-    const queryClient = useQueryClient()
-    const [content, setContent] = useState('');
-    const { myStore , setMystore } = myNewStore();
-    const token = myStore ? myStore : jwtToken
- 
+interface PostData {
+    content: string;
+}
 
+const UploadPost: React.FC = () => {
+    const { postStore, setPostStore } = usePostStore();
+    const queryClient = useQueryClient();
+    const [content, setContent] = useState<string>('');
+    const { myStore, setMystore } = myNewStore();
+    const token: string | undefined = myStore ? myStore : jwtToken;
 
-    const CreatepostData = async (postData) => {
-        const response = await axios.post('http://localhost:8000/posts', postData, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+    const createPostMutation = useMutation<PostData, Error, PostData>(
+        (postData) =>
+            axios.post('http://localhost:8000/posts', postData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }),
+        {
+            onSuccess: () => {
+                setContent('');
+                queryClient.invalidateQueries(postStore);
+                toast.success('Post uploaded');
+            },
+            onError: () => {
+                toast.error('Post upload failed');
             }
-        });
-
-        return response.data;
-    };
-
-    const createPostMutation = useMutation(CreatepostData);
+        }
+    );
 
     const handlePost = async () => {
         try {
             await createPostMutation.mutateAsync({ content });
-            setContent('');
-            // queryClient.invalidateQueries(["allpost"])
-            queryClient.invalidateQueries(postStore)
-            toast.success('Post uploaded')
-
         } catch (error) {
-            toast.error('Post upload failed')
+            console.error('Error uploading post:', error);
         }
     };
-
-    
 
     return (
         <div className="bg-white shadow-md rounded-md p-4 mb-4">

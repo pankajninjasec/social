@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import Layout from '@/layouts/layout';
+import Layout from '../app/layout';
 import { useMutation , useQueryClient } from 'react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'
 import toast from 'react-hot-toast';
 import { myNewStore, useAuthStore, useJwtStore } from '@/services/store/store';
+import { LoginFormData } from '@/types/type';
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
 
 const Login = () => {
   const { auth , setAuth } = useAuthStore()
@@ -18,7 +15,6 @@ const Login = () => {
   const queryClient = useQueryClient()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // Set user id , name , status, on zustand
   const router = useRouter();
 
   const loginMutation = useMutation(
